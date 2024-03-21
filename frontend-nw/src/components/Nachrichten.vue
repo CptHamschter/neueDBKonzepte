@@ -22,6 +22,8 @@
   
   <script>
   export default {
+    name: 'NachrichtenFeld',
+    
     data() {
       return {
         messageData: {
