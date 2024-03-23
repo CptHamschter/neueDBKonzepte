@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 app.use(bodyParser.json());
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }); //MongoDB lokal oder cloudbasiert?
+mongoose.connect('mongodb://localhost:27017/NachrichtenpageScharle', { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
