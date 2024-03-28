@@ -1,11 +1,11 @@
 import express from 'express';
-import Post from '../models/Post.js';
-import authorize from '../middleware/authorize.js';
+import Post from '../models/post.mjs';
+import authorize from '../middleware/authorize.mjs';
 
 const router = express.Router();
 
 // Post erstellen (nur Journalisten und Admins) ---- NUR Journalisten
-router.post('/', authorize(['journalist', 'admin']), async (req, res) => {
+router.post('/post-erstellen', authorize(['journalist', 'admin']), async (req, res) => {
   const { title, content } = req.body;
   try {
     const post = new Post({
@@ -23,7 +23,7 @@ router.post('/', authorize(['journalist', 'admin']), async (req, res) => {
 // Alle Posts abrufen (für alle Benutzer zugänglich)
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().populate('author', 'username');
+    const posts = await Post.find().populate('author','email');
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ message: 'Fehler beim Abrufen der Posts', error: error });

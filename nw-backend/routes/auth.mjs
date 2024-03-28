@@ -1,20 +1,20 @@
 import express from 'express';
-import User from '../models/User.js';
+import User from '../models/user.mjs';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
+//Reg
 router.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
   try {
-    // Überprüfen, ob die E-Mail bereits verwendet wird
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).send({ error: 'E-Mail wird bereits verwendet.' });
     }
 
-    const user = new User({ username, email, password });
+    const user = new User({ email, password });
     await user.save();
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     res.status(201).send({ user, token });
@@ -23,19 +23,18 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// Login
 router.post('/login', async (req, res) => {
-  const { login, password } = req.body; // login kann entweder Benutzername oder E-Mail sein
+  const { email, password } = req.body;
   try {
-    const user = await User.findOne({
-      $or: [{ username: login }, { email: login }]
-    });
+    const user = await User.findOne({ email });
     if (!user || !await bcrypt.compare(password, user.password)) {
-      throw new Error('Anmeldefehler');
+      return res.status(401).send({ error: 'Login fehlgeschlagen' });
     }
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     res.send({ user, token });
   } catch (error) {
-    res.status(400).send({ error: 'Anmeldefehler' });
+    res.status(500).send({ error: 'Ein Fehler ist aufgetreten' });
   }
 });
 
