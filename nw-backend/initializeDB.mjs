@@ -1,12 +1,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import User from '../models/user.mjs';
+import User from './models/user.mjs';
 
 const initializeDB = async () => {
-  await mongoose.connect('mongodb://localhost:27017/NachrichtenpageScharle', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect('mongodb://127.0.0.1:27017/NachrichtenpageScharle');
 
   // Optional: Bestehende Benutzer löschen
   //await User.deleteMany({});
@@ -18,9 +15,8 @@ const initializeDB = async () => {
   ];
 
   for (let userData of users) {
-    const hashedPassword = await bcrypt.hash(userData.password, 8);
-    const user = new User({ ...userData, password: hashedPassword });
-    await user.save();
+    const user = new User(userData);
+    await user.save(); // Die pre('save')-Middleware wird das Hashing durchführen
   }
 
   console.log('Datenbank initialisiert.');

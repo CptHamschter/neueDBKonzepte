@@ -15,17 +15,19 @@ router.post('/register', async (req, res) => {
     }
 
     const user = new User({ email, password });
+    console.log(user);
     await user.save();
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     res.status(201).send({ user, token });
   } catch (error) {
     res.status(400).send(error);
   }
-});
+});//wird weitergeleitet zur Mainpage (weil token)
 
 // Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log({ email, password})
   try {
     const user = await User.findOne({ email });
     if (!user || !await bcrypt.compare(password, user.password)) {
