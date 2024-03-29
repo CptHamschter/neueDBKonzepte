@@ -4,8 +4,8 @@ import authorize from '../middleware/authorize.mjs';
 
 const router = express.Router();
 
-// Post erstellen (nur Journalisten und Admins) ---- NUR Journalisten
-router.post('/post-erstellen', authorize(['journalist', 'admin']), async (req, res) => {
+// Post erstellen (nur Journalisten)
+router.post('/post-erstellen', authorize(['journalist']), async (req, res) => {
   const { title, content } = req.body;
   try {
     const post = new Post({
@@ -30,8 +30,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Post aktualisieren (nur Journalisten und Admins) ---- NUR JOURNALISTEN
-router.put('/:id', authorize(['journalist', 'admin']), async (req, res) => {
+// Post aktualisieren (nur Journalisten)
+router.put('/:id', authorize(['journalist']), async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   try {
@@ -45,8 +45,8 @@ router.put('/:id', authorize(['journalist', 'admin']), async (req, res) => {
   }
 });
 
-// Post löschen (nur Admins) UND JOURNA
-router.delete('/:id', authorize(['admin']), async (req, res) => {
+// Post löschen (Admins und Journalisten)
+router.delete('/:id', authorize(['admin', 'journalist']), async (req, res) => {
   const { id } = req.params;
   try {
     const post = await Post.findByIdAndDelete(id);
@@ -69,19 +69,23 @@ router.post('/:id/like', authorize(['user', 'journalist', 'admin']), async (req,
     }
     const index = post.likes.indexOf(req.user._id);
     if (index === -1) {
+      // Like hinzufügen
       post.likes.push(req.user._id);
+      post.likeCount += 1; // Like-Counter erhöhen
     } else {
+      // Like entfernen
       post.likes.splice(index, 1);
+      post.likeCount = Math.max(0, post.likeCount - 1); // Like-Counter verringern, aber nicht unter 0
     }
     await post.save();
-    res.status(200).json(post);
+    res.status(200).json({ likeCount: post.likeCount }); // Nur die Anzahl der Likes zurücksenden
   } catch (error) {
     res.status(400).json({ message: 'Fehler beim Liken/Entliken des Posts', error: error });
   }
 });
 
-// Kommentar hinzufügen (für alle Benutzer zugänglich) ----- NUR FÜR NUTZER
-router.post('/:id/comment', authorize(['user', 'journalist', 'admin']), async (req, res) => {
+// Kommentar hinzufügen (nur für User)
+router.post('/:id/comment', authorize(['user']), async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
   try {
