@@ -51,7 +51,7 @@ export default {
     },
     fetchPosts() {
       // Hiermit rufst du die Beiträge vom Backend ab
-      axios.get('/api/posts/') // Annahme: Dein Backend-Endpunkt ist '/api/posts'
+      axios.get('http://localhost:27017/api/posts/') // Annahme: Dein Backend-Endpunkt ist '/api/posts'
         .then(response => {
           this.posts = response.data;
         })
