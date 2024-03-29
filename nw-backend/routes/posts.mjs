@@ -45,7 +45,7 @@ router.put('/:id', authorize(['journalist', 'admin']), async (req, res) => {
   }
 });
 
-// Post löschen (nur Admins)
+// Post löschen (nur Admins) UND JOURNA
 router.delete('/:id', authorize(['admin']), async (req, res) => {
   const { id } = req.params;
   try {
