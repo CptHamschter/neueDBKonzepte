@@ -31,7 +31,7 @@ export default {
   methods: {
     submitPost() {
       // POST-Anfrage an den Backend-Endpunkt senden
-      axios.post('/api/posts/post-erstellen', {
+      axios.post('http://localhost:27017/api/posts/post-erstellen', {
         title: this.title,
         content: this.content
       })
