@@ -3,7 +3,7 @@
       <div class="header-left">
         <router-link to="/"><h1>NEWS</h1></router-link> 
       </div>
-      
+      <router-link to="/login">Login/Registrierung</router-link>
       <div class="header-right">
         <button @click="navigateToProfile">Profil</button>
         <button @click="navigateToSavedPosts">Gespeicherte Beiträge</button>

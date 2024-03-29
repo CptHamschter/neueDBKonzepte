@@ -1,58 +1,57 @@
 <template>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div class="form-container anmelde-container">
-      <form @submit.prevent="login">
-        <!-- Formular für die Anmeldung mit v-model für die Datenbindung -->
-        <h1 class="FormTitel">Anmelden</h1>
-                <!-- Social Media Links -->
-				<div class="social-container">
-                    <a href="#" class="social"><i class="fa fa-facebook"></i></a>
-                    <a href="#" class="social"><i class="fa fa-google"></i></a>
-                    <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
-                </div>
-                <span>oder nutze deinen Account!</span>
-                <input type="email" placeholder="Email" v-model="loginData.email" required/>
-                <input type="password" placeholder="Passwort" v-model="loginData.passwort" required/>
-                <a href="#">Passwort vergessen?</a>
-                <button class="FormButtons">Anmelden</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
+  <div class="form-container anmelde-container">
+    <form @submit.prevent="login">
+      <h1 class="FormTitel">Anmelden</h1>
+      <!-- Social Media Links -->
+      <div class="social-container">
+        <a href="#" class="social"><i class="fa fa-facebook"></i></a>
+        <a href="#" class="social"><i class="fa fa-google"></i></a>
+        <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
+      </div>
+      <span>oder nutze deinen Account!</span>
+      <input type="email" placeholder="Email" v-model="loginData.email" required/>
+      <input type="password" placeholder="Passwort" v-model="loginData.password" required/>
+      <a href="#">Passwort vergessen?</a>
+      <button class="FormButtons">Anmelden</button>
+    </form>
+  </div>
+</template>
 
-  export default {
-    name: 'LoginForm',
-    data() {
-        return {
-            loginData: {
-                email: '',
-                passwort: ''
-            }
-        };
-    },
-    methods:{
-        async login() {
-            try {
-                const response = await axios.post('/kundeT/loginT', this.loginData);
-                console.log('Anmeldung erfolgreich:', response.data);
-                sessionStorage.setItem('token', response.data.token); // Speichert den Token
-                sessionStorage.setItem('Kunde', JSON.stringify(response.data.Kunde));// Weiterleitung oder Update der Benutzeroberfläche nach erfolgreicher Anmeldung
+<script>
+import axios from 'axios';
 
-                // Alert mit Timer nach erfolgreicher Anmeldung
-                alert('Sie sind nun angemeldet!');
-                setTimeout(() => {
-                    // Weiterleitung auf die Hauptseite nach 2 Sekunden
-                    window.location.replace('/');
-                }, 2000); // 2000 Millisekunden = 2 Sekunden
-            } catch (error) {
-                console.error('Anmeldefehler:', error);
-            }
-        }
+export default {
+  name: 'LoginForm',
+  data() {
+    return {
+      loginData: {
+        email: '',
+        password: ''
+      }
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:27017/api/auth/login', this.loginData);
+        console.log('Anmeldung erfolgreich:', response.data);
+        sessionStorage.setItem('token', response.data.token); // Speichert den Token
+        sessionStorage.setItem('Kunde', JSON.stringify(response.data.user)); // Speichert Benutzerdaten
+
+        // Alert mit Timer nach erfolgreicher Anmeldung
+        alert('Sie sind nun angemeldet!');
+        setTimeout(() => {
+          // Weiterleitung auf die Hauptseite nach 2 Sekunden
+          window.location.replace('/');
+        }, 2000); // 2000 Millisekunden = 2 Sekunden
+      } catch (error) {
+        console.error('Anmeldefehler:', error.response.data.error);
+        // Hier könnte man z.B. eine Fehlermeldung anzeigen
+      }
     }
   }
-  </script>
+}
+</script>
 
   <style scoped> 
 h1 {

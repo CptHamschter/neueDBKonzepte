@@ -1,50 +1,53 @@
 <template>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div class="form-container registrierungs-container">
-      <form @submit.prevent="register">
-        <!-- Formular für die Registrierung mit v-model für die Datenbindung -->
-        <h1 class="FormTitel">Account erstellen</h1>
-                <!-- Social Media Links -->
-				<div class="social-container">
-                    <a href="#" class="social"><i class="fa fa-facebook"></i></a>
-                    <a href="#" class="social"><i class="fa fa-google"></i></a>
-                    <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
-                </div>
-                <span>oder nutze deine Email um dich zu registrieren!</span>
-                <select v-model="registerData.titel" required>
-                    <option value="">Titel wählen</option>
-                    <option value="Herr">Herr</option>
-                    <option value="Frau">Frau</option>
-                </select>
-                <input type="text" placeholder="Vorname" v-model="registerData.vorname" required/>
-                <input type="text" placeholder="Nachname" v-model="registerData.nachname" required/>
-                <input type="email" placeholder="Email" v-model="registerData.email" required/>
-                <input type="password" placeholder="Passwort" v-model="registerData.passwort" required/>
-                <button class="FormButtons">Registrieren</button>
-      </form>
-    </div>
-  </template>
-  
+  <div class="form-container registrierungs-container">
+    <form @submit.prevent="register">
+      <h1 class="FormTitel">Account erstellen</h1>
+      <!-- Social Media Links -->
+      <div class="social-container">
+        <a href="#" class="social"><i class="fa fa-facebook"></i></a>
+        <a href="#" class="social"><i class="fa fa-google"></i></a>
+        <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
+      </div>
+      <span>oder nutze deine Email um dich zu registrieren!</span>
+      
+      <input type="email" placeholder="Email" v-model="registerData.email" required/>
+      <input type="password" placeholder="Passwort" v-model="registerData.password" required/>
+      <button class="FormButtons">Registrieren</button>
+    </form>
+  </div>
+</template>
+
 <script>
-//import axios from 'axios';
+import axios from 'axios';
 
 export default {
   name: 'RegisterForm',
   data() {
     return {
       registerData: {
-        // Formulardaten
-        titel: '',
-        vorname: '',
-        nachname: '',
+       
         email: '',
-        passwort: ''
+        password: ''
       }
     };
   },
+  methods: {
+    async register() {
+      try {
+        const response = await axios.post('http://localhost:27017/api/auth/register', this.registerData);
+        console.log('Anmeldung erfolgreich:', response.data);
+        sessionStorage.setItem('token', response.data.token); // Speichert den Token
+        sessionStorage.setItem('Kunde', JSON.stringify(response.data.user)); // Speichert Benutzerdaten// Erfolgreiche Registrierung
+        console.log(response.data); // Hier könnte man z.B. eine Erfolgsmeldung anzeigen
+      } catch (error) {
+        console.error('Fehler bei der Registrierung:', error.response.data.error);
+        // Hier könnte man z.B. eine Fehlermeldung anzeigen
+      }
+    }
+  }
 }
-
 </script>
+
 <style scoped>
 h1 {
 font-weight: bold;
