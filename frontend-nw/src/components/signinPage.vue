@@ -1,60 +1,51 @@
 <template>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div class="form-container anmelde-container">
-      <form @submit.prevent="login">
-        <!-- Formular für die Anmeldung mit v-model für die Datenbindung -->
-        <h1 class="FormTitel">Anmelden</h1>
+    <div class="form-container registrierungs-container">
+      <form @submit.prevent="register">
+        <!-- Formular für die Registrierung mit v-model für die Datenbindung -->
+        <h1 class="FormTitel">Account erstellen</h1>
                 <!-- Social Media Links -->
 				<div class="social-container">
                     <a href="#" class="social"><i class="fa fa-facebook"></i></a>
                     <a href="#" class="social"><i class="fa fa-google"></i></a>
                     <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
                 </div>
-                <span>oder nutze deinen Account!</span>
-                <input type="email" placeholder="Email" v-model="loginData.email" required/>
-                <input type="password" placeholder="Passwort" v-model="loginData.passwort" required/>
-                <a href="#">Passwort vergessen?</a>
-                <button class="FormButtons">Anmelden</button>
+                <span>oder nutze deine Email um dich zu registrieren!</span>
+                <select v-model="registerData.titel" required>
+                    <option value="">Titel wählen</option>
+                    <option value="Herr">Herr</option>
+                    <option value="Frau">Frau</option>
+                </select>
+                <input type="text" placeholder="Vorname" v-model="registerData.vorname" required/>
+                <input type="text" placeholder="Nachname" v-model="registerData.nachname" required/>
+                <input type="email" placeholder="Email" v-model="registerData.email" required/>
+                <input type="password" placeholder="Passwort" v-model="registerData.passwort" required/>
+                <button class="FormButtons">Registrieren</button>
       </form>
     </div>
   </template>
   
-  <script>
-  import axios from 'axios';
+<script>
+//import axios from 'axios';
 
-  export default {
-    name: 'LoginForm',
-    data() {
-        return {
-            loginData: {
-                email: '',
-                passwort: ''
-            }
-        };
-    },
-    methods:{
-        async login() {
-            try {
-                const response = await axios.post('/kundeT/loginT', this.loginData);
-                console.log('Anmeldung erfolgreich:', response.data);
-                sessionStorage.setItem('token', response.data.token); // Speichert den Token
-                sessionStorage.setItem('Kunde', JSON.stringify(response.data.Kunde));// Weiterleitung oder Update der Benutzeroberfläche nach erfolgreicher Anmeldung
+export default {
+  name: 'RegisterForm',
+  data() {
+    return {
+      registerData: {
+        // Formulardaten
+        titel: '',
+        vorname: '',
+        nachname: '',
+        email: '',
+        passwort: ''
+      }
+    };
+  },
+}
 
-                // Alert mit Timer nach erfolgreicher Anmeldung
-                alert('Sie sind nun angemeldet!');
-                setTimeout(() => {
-                    // Weiterleitung auf die Hauptseite nach 2 Sekunden
-                    window.location.replace('/');
-                }, 2000); // 2000 Millisekunden = 2 Sekunden
-            } catch (error) {
-                console.error('Anmeldefehler:', error);
-            }
-        }
-    }
-  }
-  </script>
-
-  <style scoped> 
+</script>
+<style scoped>
 h1 {
 font-weight: bold;
 margin: 0;
@@ -123,10 +114,18 @@ height: 100%;
 transition: all 0.6s ease-in-out;
 }
 
-.anmelde-container {
+.registrierungs-container {
 left: 0;
 width: 50%;
-z-index: 2;
+opacity: 0;
+z-index: 1; /* reg container liegt erst "unterhalb" des anmelde containers*/
+}
+
+.container.right-panel-active .registrierungs-container {
+transform: translateX(100%);
+opacity: 1; /* sichtbar machen*/
+z-index: 5; /* jetzt überhalb des anmelde containers */
+animation: show 0.6s;
 }
 /* Icons im Formular */
 .social-container {
@@ -142,7 +141,6 @@ margin: 0 0.3125em;
 height: 2.5em;
 width: 2.5em;
 }
-
 
 select {
   background-color: #eee;
@@ -166,7 +164,7 @@ select {
 }
 @media (max-width: 790px) {
 
-    .form-container, .overlay-container {
+  .form-container, .overlay-container {
       width: 100%; 
       position: relative; 
   }
@@ -188,6 +186,6 @@ select {
 .FormButtons{
   margin-bottom: 16px;
 }
-}
 
+}
 </style>
