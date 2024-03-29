@@ -1,7 +1,7 @@
 <template>
     <header class="header">
       <div class="header-left">
-        <h1>NEWS</h1>
+        <router-link to="/"><h1>NEWS</h1></router-link> 
       </div>
       
       <div class="header-right">
