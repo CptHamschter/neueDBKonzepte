@@ -2,7 +2,7 @@
   <div>
     <div class="news-box">
       <div class="news-thumbnail">
-        <img :src="messageData.image" alt="News Thumbnail">
+        
       </div>
       <div class="news-inhalt">
         <h2>{{ messageData.title }}</h2>

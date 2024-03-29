@@ -3,6 +3,7 @@
       <div class="header-left">
         <h1>NEWS</h1>
       </div>
+      
       <div class="header-right">
         <button @click="navigateToProfile">Profil</button>
         <button @click="navigateToSavedPosts">Gespeicherte Beiträge</button>
