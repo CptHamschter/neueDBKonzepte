@@ -17,6 +17,17 @@
           <h3>{{ post.title }}</h3>
           <p>{{ post.content }}</p>
           <p>Autor: {{ post.author.email }}</p>
+          <button @click="likePost(post._id)">Like</button> <!-- Button zum Liken -->
+          <button @click="toggleCommentBox(post._id)">Kommentar verfassen</button> <!-- Button zum Öffnen des Kommentarformulars -->
+          <div v-if="showCommentBox[post._id]">
+            <textarea v-model="newComment[post._id]"></textarea>
+            <button @click="addComment(post._id)">Kommentar hinzufügen</button>
+          </div>
+          <ul>
+            <li v-for="(comment, index) in post.comments" :key="index">
+              {{ comment }}
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -35,13 +46,11 @@ import axios from 'axios';
 export default {
   name: 'HauptSeite',
 
-  components: {
-
-  },
-
   data() {
     return {
-      posts: []
+      posts: [],
+      newComment: {}, // Ein Objekt, um die neuen Kommentare für jeden Beitrag zu speichern
+      showCommentBox: {} // Ein Objekt, um zu verfolgen, ob das Kommentarformular für jeden Beitrag angezeigt wird
     };
   },
 
@@ -54,10 +63,42 @@ export default {
       axios.get('http://localhost:27017/api/posts/') // Annahme: Dein Backend-Endpunkt ist '/api/posts'
         .then(response => {
           this.posts = response.data;
+          // Initialisieren der neuen Kommentar- und showCommentBox-Objekte
+          this.posts.forEach(post => {
+            this.$set(this.newComment, post._id, '');
+            this.$set(this.showCommentBox, post._id, false);
+          });
         })
         .catch(error => {
           console.error('Fehler beim Abrufen der Beiträge:', error);
         });
+    },
+    likePost(postId) {
+      axios.post(`http://localhost:27017/api/posts/${postId}/like`)
+        .then(() => {
+          // Aktualisieren Sie die Beitragsdaten, um den aktualisierten Like-Status anzuzeigen
+          this.fetchPosts();
+        })
+        .catch(error => {
+          console.error('Fehler beim Liken des Beitrags:', error);
+        });
+    },
+    toggleCommentBox(postId) {
+      this.$set(this.showCommentBox, postId, !this.showCommentBox[postId]);
+    },
+    addComment(postId) {
+      const comment = this.newComment[postId];
+      if (comment.trim() !== '') {
+        axios.post(`http://localhost:27017/api/posts/${postId}/comment`, { comment })
+          .then(() => {
+            // Aktualisieren Sie die Beitragsdaten, um den neuen Kommentar anzuzeigen
+            this.fetchPosts();
+            this.newComment[postId] = ''; // Zurücksetzen des Kommentartexts nach dem Hinzufügen
+          })
+          .catch(error => {
+            console.error('Fehler beim Hinzufügen des Kommentars:', error);
+          });
+      }
     }
   },
 
