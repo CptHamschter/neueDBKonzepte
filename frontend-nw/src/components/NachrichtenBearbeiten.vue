@@ -18,52 +18,62 @@
   </template>
   
   <script>
-  import axios from 'axios';
-  
-  export default {
-    name: 'NachrichtenBearbeiten',
-    data() {
-      return {
-        postId: '',
-        updatedPost: {
-          title: '',
-          content: ''
-        }
-      };
-    },
-    mounted() {
-      this.postId = this.$route.params.id;
-      console.log('Post ID:', this.postId); // Hier wird die Post-ID ausgegeben
-      this.fetchPost();
-    },
-    methods: {
-      fetchPost() {
-        axios.get(`http://localhost:27017/api/posts/${this.postId}`)
-          .then(response => {
-            this.updatedPost.title = response.data.title;
-            this.updatedPost.content = response.data.content;
-          })
-          .catch(error => {
-            console.error('Fehler beim Abrufen des Beitrags:', error);
-          });
+import axios from 'axios';
+
+export default {
+  name: 'NachrichtenBearbeiten',
+  data() {
+    return {
+      postId: '',
+      updatedPost: {
+        title: '',
+        content: ''
       },
-      updatePost() {
-        axios.put(`http://localhost:27017/api/posts/${this.postId}`, this.updatedPost, {
-          headers: {
-            'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-          }
-        })
-          .then(response => {
-            console.log('Beitrag aktualisiert:', response.data);
-            // Redirect to posts page or do something else
-          })
-          .catch(error => {
-            console.error('Fehler beim Aktualisieren des Beitrags:', error);
-          });
+      isUpdating: false,
+      updateError: null
+    };
+  },
+  mounted() {
+    this.postId = this.$route.params.id;
+    this.fetchPost();
+  },
+  methods: {
+    fetchPost() {
+      if (!this.postId) {
+        this.updateError = 'Post-ID fehlt.';
+        return;
       }
+      axios.get(`http://localhost:27017/api/posts/${this.postId}`)
+        .then(response => {
+          this.updatedPost = response.data;
+        })
+        .catch(error => {
+          console.error('Fehler beim Abrufen des Beitrags:', error);
+          this.updateError = 'Fehler beim Laden des Beitrags.';
+        });
+    },
+    updatePost() {
+      this.isUpdating = true;
+      axios.put(`http://localhost:27017/api/posts/${this.postId}`, this.updatedPost, {
+        headers: {
+          'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+        }
+      })
+        .then(() => {
+          alert('Beitrag erfolgreich aktualisiert!');
+          this.isUpdating = false;
+        })
+        .catch(error => {
+          // Fehlerbehandlung
+          console.error('Fehler beim Aktualisieren des Beitrags:', error);
+          this.updateError = 'Fehler beim Aktualisieren des Beitrags.';
+          this.isUpdating = false;
+        });
     }
-  };
-  </script>
+  }
+};
+</script>
+
   
   <style scoped>
   .edit-post-container {

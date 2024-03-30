@@ -30,12 +30,27 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Post abrufen (für alle Benutzer zugänglich)
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findById(id).populate('author', 'email name');
+    if (!post) {
+      return res.status(404).json({ message: 'Post nicht gefunden' });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: 'Fehler beim Abrufen des Posts', error: error });
+  }
+});
+
 // Post aktualisieren (nur Journalisten)
 router.put('/:id', authorize(['journalist']), async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   try {
     const post = await Post.findByIdAndUpdate(id, { title, content }, { new: true });
+    console.log(post);
     if (!post) {
       return res.status(404).json({ message: 'Post nicht gefunden' });
     }
@@ -85,7 +100,7 @@ router.post('/:id/like', authorize(['user', 'journalist', 'admin']), async (req,
 });
 
 // Kommentar hinzufügen (nur für User)
-router.post('/:id/comment', authorize(['user']), async (req, res) => {
+router.post('/:id/comment', authorize(['user, journalist, admin ']), async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
   try {
