@@ -23,6 +23,7 @@
             <!-- Hier können Sie weitere Kommentarinformationen anzeigen, wie das Datum -->
           </div>
           <textarea v-model="newComment" placeholder="Schreiben Sie einen Kommentar"></textarea>
+          <br>
           <button @click="addComment(post._id)">Kommentar hinzufügen</button>
         </div>
       </div>
@@ -129,9 +130,7 @@ export default {
     // Setzen Sie currentUser basierend auf Ihrer Implementierung
   }
 }
-</script>
-
-<style scoped>
+</script><style scoped>
 .posts-container {
   display: flex;
   flex-direction: column;
@@ -195,6 +194,7 @@ export default {
 .no-posts {
   margin-top: 20px;
 }
+
 .comment-section {
   margin-top: 20px;
 }
@@ -203,13 +203,14 @@ export default {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-}
+  border-radius: 8px; }
 
 .comment textarea {
-  width: 100%;
+  width: calc(100% - 20px); /* Die Breite des Textbereichs abzüglich des seitlichen Padding */
   padding: 10px;
   margin-bottom: 10px;
+  border: 1px solid #ccc; /* Rahmen hinzufügen */
+  border-radius: 4px; /* Abrunde Ecken */
 }
 
 .comment button {
