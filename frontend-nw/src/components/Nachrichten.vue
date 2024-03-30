@@ -39,13 +39,17 @@ import axios from 'axios';
 
 export default {
   name: 'PostsPage',
-
+  
   data() {
     return {
       posts: [],
-      currentUser: null,
-      newComment: ''
+      newComment: '',
+      currentUser: sessionStorage.getItem('userId')
     };
+  },
+
+  created() {
+    this.fetchPosts();
   },
 
   methods: {
@@ -60,31 +64,37 @@ export default {
     },
 
     likePost(postId) {
-      axios.post(`http://localhost:27017/api/posts/${postId}/like`, null, {
+      axios.post(`http://localhost:27017/api/posts/${postId}/like`, {}, {
         headers: {
           'Authorization': 'Bearer ' + sessionStorage.getItem('token')
         }
       })
-        .then(response => {
-          const index = this.posts.findIndex(post => post._id === postId);
-          if (index !== -1) {
-            this.posts[index].likes = response.data.likeCount;
+      .then(response => {
+        const index = this.posts.findIndex(post => post._id === postId);
+        if (index !== -1) {
+          this.posts[index].likeCount = response.data.likeCount;
+          
+          const userLikes = JSON.parse(localStorage.getItem('userLikes')) || [];
+          const userIndex = userLikes.indexOf(postId);
+          
+          if (userIndex === -1) {
+            userLikes.push(postId);
+          } else {
+            userLikes.splice(userIndex, 1);
           }
-          console.log('Beitrag geliked');
-          this.fetchPosts();
-        })
-        .catch(error => {
-          console.error('Fehler beim Liken des Beitrags:', error);
-          console.log('Beitrag konnte nicht geliked werden');
-        });
+          
+          localStorage.setItem('userLikes', JSON.stringify(userLikes));
+          this.$forceUpdate(); // Erzwingen der Aktualisierung der Ansicht
+        }
+      })
+      .catch(error => {
+        console.error('Fehler beim Liken/Entliken des Beitrags:', error);
+      });
     },
 
     isLiked(postId) {
-      const post = this.posts.find(post => post._id === postId);
-      if (post && Array.isArray(post.likes) && this.currentUser && post.likes.includes(this.currentUser._id)) {
-        return true;
-      }
-      return false;
+      const userLikes = JSON.parse(localStorage.getItem('userLikes')) || [];
+      return userLikes.includes(postId);
     },
 
     canDeletePost() {
@@ -130,7 +140,8 @@ export default {
     // Setzen Sie currentUser basierend auf Ihrer Implementierung
   }
 }
-</script><style scoped>
+</script>
+<style scoped>
 .posts-container {
   display: flex;
   flex-direction: column;

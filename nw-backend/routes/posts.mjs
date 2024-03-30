@@ -100,7 +100,7 @@ router.post('/:id/like', authorize(['user', 'journalist', 'admin']), async (req,
 });
 
 // Kommentar hinzufügen (nur für User)
-router.post('/:id/comment', authorize(['user, journalist, admin ']), async (req, res) => {
+router.post('/:id/comment', authorize(['user', 'journalist', 'admin']), async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
   try {
