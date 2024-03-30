@@ -63,7 +63,7 @@
     backdrop-filter: blur(5px);
     }
     
-    /* Spezifikation und Animationen für Anmeldung und Sign Up - siehe Animationen zusätzlich bei vanilla JS Code */
+   
     .container {
     background-color: #fff;
     border-radius: 0.625em;
@@ -75,37 +75,37 @@
     min-height: 30em;
     }
     
-    /* Übergang des Registrierungs-Container - translateX(100) -> Rechte Seite des containers (sobald aktiv)*/
+  
     
     .container.right-panel-active .registrierungs-container {
     transform: translateX(100%);
-    opacity: 1; /* sichtbar machen*/
-    z-index: 5; /* jetzt überhalb des anmelde containers */
+    opacity: 1; 
+    z-index: 5; 
     animation: show 0.6s;
     }
     
     @keyframes show {
     0%, 49.99% {
       opacity: 0;
-      z-index: 1; /* erste Teil der Animation noch versteckt */
+      z-index: 1;
     }
     
     50%, 100% {
       opacity: 1;
-      z-index: 5; /* voll sichtbar */
+      z-index: 5; 
     }
     }
     
     
     .container.right-panel-active .overlay-container{
-    transform: translateX(-100%); /* bewegt sich auf linke Seite des Containers */
+    transform: translateX(-100%); 
     }
     
     .container.right-panel-active .overlay {
-    transform: translateX(50%); /* container bewegt sich wieder nach rechts */
+    transform: translateX(50%); 
     }
     
-    .container.right-panel-active .overlay-left { /* sobald right-panel-active, translateX(0) -> voll sichtbar*/
+    .container.right-panel-active .overlay-left { 
     transform: translateX(0);
     }
     

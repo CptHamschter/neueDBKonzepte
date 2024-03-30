@@ -14,12 +14,12 @@ export default {
   
   methods: {
     navigateToHome() {
-      // Hier implementieren Sie die Navigation zur Startseite
+
       this.$router.push('/startseite');
     },
    
     navigateToLogin() {
-      // Hier implementieren Sie die Navigation zur Login/Registrierungsseite
+
       this.$router.push('/');
     }
   }

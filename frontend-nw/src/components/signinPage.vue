@@ -2,12 +2,8 @@
   <div class="form-container registrierungs-container">
     <form @submit.prevent="register">
       <h1 class="FormTitel">Account erstellen</h1>
-      <!-- Social Media Links -->
-      <div class="social-container">
-        <a href="#" class="social"><i class="fa fa-facebook"></i></a>
-        <a href="#" class="social"><i class="fa fa-google"></i></a>
-        <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
-      </div>
+    
+      
       <span>oder nutze deine Email um dich zu registrieren!</span>
       
       <input type="email" placeholder="Email" v-model="registerData.email" required/>
@@ -33,17 +29,21 @@ export default {
   },
   methods: {
     async register() {
-      try {
-        const response = await axios.post('http://localhost:27017/api/auth/register', this.registerData);
-        console.log('Anmeldung erfolgreich:', response.data);
-        sessionStorage.setItem('token', response.data.token); // Speichert den Token
-        sessionStorage.setItem('Kunde', JSON.stringify(response.data.user)); // Speichert Benutzerdaten// Erfolgreiche Registrierung
-        console.log(response.data); // Hier könnte man z.B. eine Erfolgsmeldung anzeigen
-      } catch (error) {
-        console.error('Fehler bei der Registrierung:', error.response.data.error);
-        // Hier könnte man z.B. eine Fehlermeldung anzeigen
-      }
-    }
+  try {
+    const response = await axios.post('http://localhost:27017/api/auth/register', this.registerData);
+    console.log('Registrierung erfolgreich:', response.data);
+    sessionStorage.setItem('token', response.data.token); 
+    sessionStorage.setItem('Kunde', JSON.stringify(response.data.user)); 
+    alert('Sie sind nun angemeldet!');
+    setTimeout(() => {
+      window.location.replace('/startseite');
+    }, 1000); 
+  } catch (error) {
+    console.error('Fehler bei der Registrierung:', error.response.data.error);
+    alert('Fehler bei der Registrierung: ' + error.response.data.error); 
+  }
+}
+
   }
 }
 </script>
@@ -65,7 +65,7 @@ text-decoration: none;
 margin: 0.9375em 0;
 }
 
-/* Button Eigenschaften*/
+
 button {
 border-radius: 1.8em;
 border: 0.04em solid black;
@@ -91,7 +91,7 @@ button.ghost {
 background-color: transparent;
 border-color: #FFFFFF;
 }
-/* Eingabefelder Anmelde-/ SignUp-Formular */
+
 form {
 background-color: #FFFFFF;
 display: flex;
@@ -121,16 +121,16 @@ transition: all 0.6s ease-in-out;
 left: 0;
 width: 50%;
 opacity: 0;
-z-index: 1; /* reg container liegt erst "unterhalb" des anmelde containers*/
+z-index: 1; 
 }
 
 .container.right-panel-active .registrierungs-container {
 transform: translateX(100%);
-opacity: 1; /* sichtbar machen*/
-z-index: 5; /* jetzt überhalb des anmelde containers */
+opacity: 1; 
+z-index: 5; 
 animation: show 0.6s;
 }
-/* Icons im Formular */
+
 .social-container {
 margin: 1.25em 0;
 }

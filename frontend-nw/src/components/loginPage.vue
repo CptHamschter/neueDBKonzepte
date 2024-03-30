@@ -30,18 +30,18 @@ export default {
       try {
         const response = await axios.post('http://localhost:27017/api/auth/login', this.loginData);
         console.log('Anmeldung erfolgreich:', response.data);
-        sessionStorage.setItem('token', response.data.token); // Speichert den Token
-        sessionStorage.setItem('Kunde', JSON.stringify(response.data.user)); // Speichert Benutzerdaten
+        sessionStorage.setItem('token', response.data.token); 
+        sessionStorage.setItem('Kunde', JSON.stringify(response.data.user)); 
 
-        // Alert mit Timer nach erfolgreicher Anmeldung
+        
         alert('Sie sind nun angemeldet!');
         setTimeout(() => {
-          // Weiterleitung auf die Hauptseite nach 2 Sekunden
+          
           window.location.replace('/startseite');
-        }, 1000); // 2000 Millisekunden = 2 Sekunden
+        }, 1000); 
       } catch (error) {
         console.error('Anmeldefehler:', error.response.data.error);
-        // Hier könnte man z.B. eine Fehlermeldung anzeigen
+        
       }
     }
   }
@@ -65,7 +65,7 @@ text-decoration: none;
 margin: 0.9375em 0;
 }
 
-/* Button Eigenschaften*/
+
 button {
 border-radius: 1.8em;
 border: 0.04em solid black;
@@ -91,7 +91,7 @@ button.ghost {
 background-color: transparent;
 border-color: #FFFFFF;
 }
-/* Eingabefelder Anmelde-/ SignUp-Formular */
+
 form {
 background-color: #FFFFFF;
 display: flex;
@@ -122,7 +122,7 @@ left: 0;
 width: 50%;
 z-index: 2;
 }
-/* Icons im Formular */
+
 .social-container {
 margin: 1.25em 0;
 }

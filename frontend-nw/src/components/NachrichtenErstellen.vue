@@ -39,7 +39,7 @@ export default {
           }
         });
         if (response.status === 201) {
-          this.$router.push('/startseite'); // Zur Hauptseite oder einer Bestätigungsseite navigieren
+          this.$router.push('/startseite'); 
           console.log('Post erfolgreich erstellt:', response.data);
         } else {
           console.error('Fehler beim Erstellen des Posts:', response.data);

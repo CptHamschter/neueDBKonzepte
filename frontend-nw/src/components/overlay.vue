@@ -1,7 +1,7 @@
 <template>
     <div class="overlay-container">
       <div class="overlay">
-        <!-- Overlay-Inhalte -->
+      
         <div class="overlay-panel overlay-left">
             <h1>Willkommen zurück!</h1>
             <p>Um mit uns in Kontakt zu bleiben, melde dich bitte mit deinen persönlichen Zugangsdaten an</p>
@@ -21,7 +21,7 @@ export default {
   name: 'OverlayComponent',
   methods: {
     toggle() {
-      this.$emit('toggle'); // Sendet ein Ereignis an die Elternkomponente
+      this.$emit('toggle'); 
     }
   }
 }
@@ -42,7 +42,7 @@ letter-spacing: 0.03125em;
 margin: 1.25em 0 1.875em;
 }
 
-/* Button Eigenschaften*/
+
 button {
 border-radius: 1.8em;
 border: 0.04em solid black;
@@ -71,17 +71,17 @@ border-color: #FFFFFF;
 @keyframes show {
 0%, 49.99% {
   opacity: 0;
-  z-index: 1; /* erste Teil der Animation noch versteckt */
+  z-index: 1; 
 }
 
 50%, 100% {
   opacity: 1;
-  z-index: 5; /* voll sichtbar */
+  z-index: 5; 
 }
 }
-/* Übergang nach Links - translateX(-100) -> Linke Seite des containers*/
 
-.overlay-container { /* Container, der das "Overlay" Element enthält */
+
+.overlay-container { 
 position: absolute;
 top: 0;
 left: 50%;
@@ -89,14 +89,14 @@ width: 50%;
 height: 100%;
 overflow: hidden;
 transition: transform 0.6s ease-in-out;
-z-index: 100; /* soll vor allen anderen Elementen ein Overlay sein - wenn vorausgesetzt */
+z-index: 100; 
 }
 
 .container.right-panel-active .overlay-container{
-transform: translateX(-100%); /* bewegt sich auf linke Seite des Containers */
+transform: translateX(-100%); 
 }
 
-.overlay { /* Definiert einzelne Overlay Elemente*/
+.overlay { 
 background: black;
 background-repeat: no-repeat;
 background-size: cover;
@@ -111,10 +111,10 @@ transition: transform 0.6s ease-in-out;
 }
 
 .container.right-panel-active .overlay {
-transform: translateX(50%); /* container bewegt sich wieder nach rechts */
+transform: translateX(50%); 
 }
 
-.overlay-panel { /* einzelnen Overlay panels für Anmeldung und Registrierung */
+.overlay-panel { 
 position: absolute;
 display: flex;
 align-items: center;
@@ -129,15 +129,15 @@ transition: transform 0.6s ease-in-out;
 }
 
 .overlay-left {
-transform: translateX(-20%); /* im Hintergrund, erst etwas nach links verschoben */
+transform: translateX(-20%); 
 }
 
-.container.right-panel-active .overlay-left { /* sobald right-panel-active, translateX(0) -> voll sichtbar*/
+.container.right-panel-active .overlay-left { 
 transform: translateX(0);
 }
 
 .overlay-right {
-right: 0; /* von Anfang an sichtbar */
+right: 0; 
 transform: translateX(0);
 }
 
@@ -171,7 +171,7 @@ select {
       position: relative; 
   }
   .overlay {
-      display: none; /* Versteckt das Overlay auf kleineren Bildschirmen*/
+      display: none; 
   }
 
 }

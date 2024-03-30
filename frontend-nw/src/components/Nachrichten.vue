@@ -27,7 +27,7 @@
           <div v-for="comment in post.comments" :key="comment._id" class="comment">
             <p>{{ comment.body }}</p>
             <p v-if="comment.author">{{ comment.author.email }}</p>
-            <!-- Hier können Sie weitere Kommentarinformationen anzeigen, wie das Datum -->
+          
           </div>
           <textarea v-model="comments[post._id]" :placeholder="'Schreiben Sie einen Kommentar zu ' + post.title"></textarea>
           <br>
@@ -53,7 +53,7 @@ export default {
       posts: [],
       newComment: '',
       currentUser: sessionStorage.getItem('userId'),
-      comments: {} // Initialisierung des comments-Objekts
+      comments: {} 
     };
   },
 
@@ -66,7 +66,7 @@ export default {
       axios.get('http://localhost:27017/api/posts/')
         .then(response => {
           this.posts = response.data;
-           // Initialisieren Sie das Kommentarobjekt für jeden Beitrag
+           
            this.posts.forEach(post => {
             this.comments[post._id] = '';
           });
@@ -97,7 +97,7 @@ export default {
           }
           
           localStorage.setItem('userLikes', JSON.stringify(userLikes));
-          this.$forceUpdate(); // Erzwingen der Aktualisierung der Ansicht
+          this.$forceUpdate(); 
         }
       })
       .catch(error => {
@@ -122,7 +122,7 @@ export default {
       })
         .then(response => {
           console.log('Beitrag gelöscht:', response);
-          this.fetchPosts(); // Aktualisieren Sie die Beitragliste nach dem Löschen
+          this.fetchPosts(); 
         })
         .catch(error => {
           console.error('Fehler beim Löschen des Beitrags:', error);
@@ -130,10 +130,10 @@ export default {
     },
     
     addComment(postId) {
-  // Überprüfen, ob der Kommentar mindestens ein Wort enthält
+  
   if (!this.comments[postId].trim()) {
     console.error('Kommentar nicht vollständig');
-    return; // Stoppen Sie die Methode hier, wenn der Kommentar nicht vollständig ist
+    return; 
   }
 
   axios.post(`http://localhost:27017/api/posts/${postId}/comment`, { comment: this.comments[postId] }, {
@@ -143,9 +143,9 @@ export default {
   })
     .then(response => {
       console.log('Kommentar hinzugefügt:', response.data);
-      // Aktualisieren Sie die Liste der Beiträge, um den neuen Kommentar anzuzeigen
+     
       this.fetchPosts();
-      // Setzen Sie das Eingabefeld für den Kommentar zurück
+    
       this.comments[postId] = '';
     })
     .catch(error => {
@@ -156,7 +156,7 @@ export default {
 
   mounted() {
     this.fetchPosts();
-    // Setzen Sie currentUser basierend auf Ihrer Implementierung
+  
   }
 }
 </script>
@@ -179,7 +179,7 @@ export default {
   background-color: #f0f0f0;
   padding: 20px;
   border-radius: 8px;
-  width: 120%; /* Ändern der Breite der Beitragsbox */
+  width: 120%; 
 }
 
 .post-content {
@@ -189,9 +189,9 @@ export default {
 
 .bild {
 height: 100%;
-  width: 30%; /* Anpassen der Breite des Bildes */
-  /* Automatische Anpassung der Höhe */
-  padding-right: 20px/* Hinzufügen von Abstand zwischen Bild und Text */
+  width: 30%; 
+ 
+  padding-right: 20px
 }
 
 .post-text {
@@ -204,8 +204,8 @@ height: 100%;
 
 .post-actions {
   display: flex;
-  justify-content: center; /* Zentrieren der Buttons */
-  margin-top: 10px; /* Hinzufügen von Abstand oberhalb der Buttons */
+  justify-content: center; 
+  margin-top: 10px; 
 }
 
 .like-button, .delete-button, .edit-link {

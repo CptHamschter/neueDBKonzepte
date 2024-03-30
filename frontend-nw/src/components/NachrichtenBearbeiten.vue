@@ -67,11 +67,11 @@ export default {
         .then(() => {
           alert('Beitrag erfolgreich aktualisiert!');
           this.isUpdating = false;
-          // Weiterleitung zur Startseite
+        
           this.$router.push('/startseite');
         })
         .catch(error => {
-          // Fehlerbehandlung
+       
           console.error('Fehler beim Aktualisieren des Beitrags:', error);
           this.updateError = 'Fehler beim Aktualisieren des Beitrags.';
           this.isUpdating = false;
