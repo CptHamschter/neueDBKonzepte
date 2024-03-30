@@ -15,6 +15,16 @@
           </button>
           <button if="canDeletePost()" @click="deletePost(post._id)" class="delete-button">Delete</button>
           <router-link :to="'/nachricht-bearbeiten/' + post._id" class="edit-link">Nachricht bearbeiten</router-link>
+        </div><div class="comment-section">
+          <h4>Kommentare:</h4>
+          <div v-for="comment in post.comments" :key="comment._id" class="comment">
+            <p>{{ comment.body }}</p>
+            <p v-if="comment.author">{{ comment.author.email }}</p>
+            <!-- Hier können Sie weitere Kommentarinformationen anzeigen, wie das Datum -->
+          </div>
+          <textarea v-model="newComment" placeholder="Schreiben Sie einen Kommentar"></textarea>
+          <br>
+          <button @click="addComment(post._id)">Kommentar hinzufügen</button>
         </div>
       </div>
     </div>
@@ -22,8 +32,8 @@
       <p>Keine Beiträge gefunden</p>
     </div>
   </div>
+     
 </template>
-
 <script>
 import axios from 'axios';
 
@@ -33,7 +43,8 @@ export default {
   data() {
     return {
       posts: [],
-      currentUser: null
+      currentUser: null,
+      newComment: ''
     };
   },
 
@@ -77,9 +88,7 @@ export default {
     },
 
     canDeletePost() {
-      // Überprüfen, ob der aktuelle Benutzer berechtigt ist, den Beitrag zu löschen
-      
-        return !!this.currentUser;
+      return !!this.currentUser;
     },
 
     deletePost(postId) {
@@ -95,6 +104,24 @@ export default {
         .catch(error => {
           console.error('Fehler beim Löschen des Beitrags:', error);
         });
+    },
+    
+    addComment(postId) {
+      axios.post(`http://localhost:27017/api/posts/${postId}/comment`, { comment: this.newComment }, {
+        headers: {
+          'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+        }
+      })
+        .then(response => {
+          console.log('Kommentar hinzugefügt:', response.data);
+          // Aktualisieren Sie die Liste der Beiträge, um den neuen Kommentar anzuzeigen
+          this.fetchPosts();
+          // Setzen Sie das Eingabefeld für den Kommentar zurück
+          this.newComment = '';
+        })
+        .catch(error => {
+          console.error('Fehler beim Hinzufügen des Kommentars:', error);
+        });
     }
   },
 
@@ -103,8 +130,7 @@ export default {
     // Setzen Sie currentUser basierend auf Ihrer Implementierung
   }
 }
-</script>
-<style scoped>
+</script><style scoped>
 .posts-container {
   display: flex;
   flex-direction: column;
@@ -167,5 +193,37 @@ export default {
 
 .no-posts {
   margin-top: 20px;
+}
+
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px; }
+
+.comment textarea {
+  width: calc(100% - 20px); /* Die Breite des Textbereichs abzüglich des seitlichen Padding */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc; /* Rahmen hinzufügen */
+  border-radius: 4px; /* Abrunde Ecken */
+}
+
+.comment button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.comment button:hover {
+  background-color: #0056b3;
 }
 </style>
