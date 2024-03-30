@@ -29,7 +29,7 @@
             <p v-if="comment.author">{{ comment.author.email }}</p>
             <!-- Hier können Sie weitere Kommentarinformationen anzeigen, wie das Datum -->
           </div>
-          <textarea v-model="newComment" :placeholder="'Schreiben Sie einen Kommentar zu ' + post.title"></textarea>
+          <textarea v-model="comments[post._id]" :placeholder="'Schreiben Sie einen Kommentar zu ' + post.title"></textarea>
           <br>
           <button @click="addComment(post._id)">Kommentar hinzufügen</button>
         </div>
@@ -53,6 +53,7 @@ export default {
       posts: [],
       newComment: '',
       currentUser: sessionStorage.getItem('userId'),
+      comments: {} // Initialisierung des comments-Objekts
     };
   },
 
@@ -65,6 +66,10 @@ export default {
       axios.get('http://localhost:27017/api/posts/')
         .then(response => {
           this.posts = response.data;
+           // Initialisieren Sie das Kommentarobjekt für jeden Beitrag
+           this.posts.forEach(post => {
+            this.comments[post._id] = '';
+          });
         })
         .catch(error => {
           console.error('Fehler beim Abrufen der Beiträge:', error);
@@ -125,22 +130,28 @@ export default {
     },
     
     addComment(postId) {
-      axios.post(`http://localhost:27017/api/posts/${postId}/comment`, { comment: this.newComment }, {
-        headers: {
-          'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-        }
-      })
-        .then(response => {
-          console.log('Kommentar hinzugefügt:', response.data);
-          // Aktualisieren Sie die Liste der Beiträge, um den neuen Kommentar anzuzeigen
-          this.fetchPosts();
-          // Setzen Sie das Eingabefeld für den Kommentar zurück
-          this.newComment = '';
-        })
-        .catch(error => {
-          console.error('Fehler beim Hinzufügen des Kommentars:', error);
-        });
+  // Überprüfen, ob der Kommentar mindestens ein Wort enthält
+  if (!this.comments[postId].trim()) {
+    console.error('Kommentar nicht vollständig');
+    return; // Stoppen Sie die Methode hier, wenn der Kommentar nicht vollständig ist
+  }
+
+  axios.post(`http://localhost:27017/api/posts/${postId}/comment`, { comment: this.comments[postId] }, {
+    headers: {
+      'Authorization': 'Bearer ' + sessionStorage.getItem('token')
     }
+  })
+    .then(response => {
+      console.log('Kommentar hinzugefügt:', response.data);
+      // Aktualisieren Sie die Liste der Beiträge, um den neuen Kommentar anzuzeigen
+      this.fetchPosts();
+      // Setzen Sie das Eingabefeld für den Kommentar zurück
+      this.comments[postId] = '';
+    })
+    .catch(error => {
+      console.error('Fehler beim Hinzufügen des Kommentars:', error);
+    });
+}
   },
 
   mounted() {
@@ -168,7 +179,7 @@ export default {
   background-color: #f0f0f0;
   padding: 20px;
   border-radius: 8px;
-  width: 100%; /* Ändern der Breite der Beitragsbox */
+  width: 120%; /* Ändern der Breite der Beitragsbox */
 }
 
 .post-content {
@@ -177,9 +188,10 @@ export default {
 }
 
 .bild {
+height: 100%;
   width: 30%; /* Anpassen der Breite des Bildes */
   /* Automatische Anpassung der Höhe */
-  /* Hinzufügen von Abstand zwischen Bild und Text */
+  padding-right: 20px/* Hinzufügen von Abstand zwischen Bild und Text */
 }
 
 .post-text {

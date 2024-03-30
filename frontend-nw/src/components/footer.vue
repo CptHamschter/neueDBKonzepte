@@ -7,10 +7,10 @@
         </div>
         <p class="closing-message">Bleiben Sie informiert und entdecken Sie die Welt mit uns!</p>
       </div>
-      <div class="footer-social">
+    
      
       
-      </div>
+      
     </footer>
   </template>
   
@@ -28,11 +28,6 @@
     text-align: center;
   }
   
-  .footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
   
   
   
@@ -42,9 +37,7 @@
     margin-bottom: 10px;
   }
   
-  .footer-social {
-    margin-top: 20px;
-  }
+ 
   
   
   </style>
