@@ -12,11 +12,11 @@ createApp(App)
   routes: [
     {
       path:'/',
-      component:HauptSeite
+      component:LogRegView
     },
     {
-      path:'/login',
-      component:LogRegView
+      path:'/startseite',
+      component:HauptSeite
     },
     {
     path:'/nachricht',

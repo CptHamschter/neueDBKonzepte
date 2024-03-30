@@ -4,10 +4,7 @@
       <h1 @click="navigateToHome">NEWS</h1>
     </div>
     <span @click="navigateToLogin">Login/Registrierung</span>
-    <div class="header-right">
-      <button @click="navigateToProfile">Profil</button>
-      <button @click="navigateToSavedPosts">Gespeicherte Beiträge</button>
-    </div>
+    
   </header>
 </template>
 
@@ -18,19 +15,12 @@ export default {
   methods: {
     navigateToHome() {
       // Hier implementieren Sie die Navigation zur Startseite
-      this.$router.push('/');
+      this.$router.push('/startseite');
     },
-    navigateToProfile() {
-      // Hier implementieren Sie die Navigation zur Profilseite
-      this.$router.push('/profile');
-    },
-    navigateToSavedPosts() {
-      // Hier implementieren Sie die Navigation zur Seite mit den gespeicherten Beiträgen
-      this.$router.push('/saved-posts');
-    },
+   
     navigateToLogin() {
       // Hier implementieren Sie die Navigation zur Login/Registrierungsseite
-      this.$router.push('/login');
+      this.$router.push('/');
     }
   }
 };

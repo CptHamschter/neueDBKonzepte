@@ -8,7 +8,7 @@
         <p class="closing-message">Bleiben Sie informiert und entdecken Sie die Welt mit uns!</p>
       </div>
       <div class="footer-social">
-        <h3>Folgen Sie uns auf</h3>
+     
       
       </div>
     </footer>

@@ -2,12 +2,7 @@
   <div class="form-container anmelde-container">
     <form @submit.prevent="login">
       <h1 class="FormTitel">Anmelden</h1>
-      <!-- Social Media Links -->
-      <div class="social-container">
-        <a href="#" class="social"><i class="fa fa-facebook"></i></a>
-        <a href="#" class="social"><i class="fa fa-google"></i></a>
-        <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
-      </div>
+    
       <span>oder nutze deinen Account!</span>
       <input type="email" placeholder="Email" v-model="loginData.email" required/>
       <input type="password" placeholder="Passwort" v-model="loginData.password" required/>
@@ -42,8 +37,8 @@ export default {
         alert('Sie sind nun angemeldet!');
         setTimeout(() => {
           // Weiterleitung auf die Hauptseite nach 2 Sekunden
-          window.location.replace('/');
-        }, 2000); // 2000 Millisekunden = 2 Sekunden
+          window.location.replace('/startseite');
+        }, 1000); // 2000 Millisekunden = 2 Sekunden
       } catch (error) {
         console.error('Anmeldefehler:', error.response.data.error);
         // Hier könnte man z.B. eine Fehlermeldung anzeigen
