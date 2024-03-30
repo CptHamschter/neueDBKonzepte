@@ -58,7 +58,7 @@
     height: 100vh;
     width:auto;
     margin: auto;
-    /*background-image: url('../assets/KaffeeLogin.jpg');*/
+    background-image: url('../assets/NachrichtenpageBackground.jpg');
     background-size: cover;
     backdrop-filter: blur(5px);
     }
