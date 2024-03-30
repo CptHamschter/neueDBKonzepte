@@ -10,14 +10,14 @@
 <script>
 
 import headerBar from '@/components/header.vue'
-//import HauptSeite from '@/components/Hauptseite.vue'
+
 import FooTer from '@/components/footer.vue'
 export default {
   name: 'App',
   components: {
 
     headerBar,
-    //HauptSeite,
+    
     FooTer,
   }
 }

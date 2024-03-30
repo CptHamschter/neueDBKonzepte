@@ -24,7 +24,7 @@ createApp(App)
       },
     
       {
-        path:'/nachricht-bearbeiten',
+        path:'/nachricht-bearbeiten/:id',
         component:NachrichtenBearbeiten,
       }
     ]
