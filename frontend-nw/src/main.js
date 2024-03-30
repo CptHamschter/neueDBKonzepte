@@ -4,6 +4,7 @@ import * as VueRouter from 'vue-router';
 import HauptSeite from './components/Hauptseite.vue'; 
 import NachrichtenErstellen from './components/NachrichtenErstellen.vue';
 import LogRegView from './components/LogRegView.vue';
+import NachrichtenBearbeiten from './components/NachrichtenBearbeiten.vue'
 
 createApp(App)
 .use(VueRouter.createRouter({
@@ -20,6 +21,12 @@ createApp(App)
     {
     path:'/nachricht',
     component:NachrichtenErstellen,
-  }]
+      },
+    
+      {
+        path:'/nachricht-bearbeiten',
+        component:NachrichtenBearbeiten,
+      }
+    ]
 }))
 .mount('#app')

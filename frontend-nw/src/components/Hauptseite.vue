@@ -9,7 +9,7 @@
     <br>
     <br>
     
-    <!-- Hier werden die Beiträge angezeigt -->
+    <!-- Hier werden die Beiträge angezeigt 
     <div v-if="posts.length > 0">
       <h2>Alle Beiträge:</h2>
       <ul>
@@ -17,8 +17,8 @@
           <h3>{{ post.title }}</h3>
           <p>{{ post.content }}</p>
           <p>Autor: {{ post.author.email }}</p>
-          <button @click="likePost(post._id)">Like</button> <!-- Button zum Liken -->
-          <button @click="toggleCommentBox(post._id)">Kommentar verfassen</button> <!-- Button zum Öffnen des Kommentarformulars -->
+          <button @click="likePost(post._id)">Like</button> 
+          <button @click="toggleCommentBox(post._id)">Kommentar verfassen</button>
           <div v-if="showCommentBox[post._id]">
             <textarea v-model="newComment[post._id]"></textarea>
             <button @click="addComment(post._id)">Kommentar hinzufügen</button>
@@ -34,17 +34,25 @@
     <div v-else>
       <p>Keine Beiträge gefunden</p>
     </div>
-    
+  -->
+      <!-- Hier werden die Beiträge angezeigt -->
+      <PostsPage/>
+      
+
     
   </div>
 </template>
 
 <script>
 
-import axios from 'axios';
+//import axios from 'axios';
+import PostsPage from '@/components/Nachrichten.vue'
 
 export default {
   name: 'HauptSeite',
+  components:{
+    PostsPage,
+  },
 
   data() {
     return {
@@ -58,7 +66,7 @@ export default {
     navigateToCreateNews() {
       // Hier kannst du zur Seite zum Erstellen von Nachrichten navigieren
     },
-    fetchPosts() {
+    /*fetchPosts() {
       // Hiermit rufst du die Beiträge vom Backend ab
       axios.get('http://localhost:27017/api/posts/') // Annahme: Dein Backend-Endpunkt ist '/api/posts'
         .then(response => {
@@ -105,6 +113,7 @@ export default {
   mounted() {
     // Hier rufst du die Beiträge beim Laden der Seite ab
     this.fetchPosts();
-  }
+  }*/
+}
 };
 </script>
