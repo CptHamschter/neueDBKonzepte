@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
     const user = new User({ email, password });
     console.log(user);
     await user.save();
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '24h' });
     res.status(201).send({ user, token });
   } catch (error) {
     res.status(400).send(error);
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     if (!user || !await bcrypt.compare(password, user.password)) {
       return res.status(401).send({ error: 'Login fehlgeschlagen' });
     }
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '24h' });
     res.send({ user, token });
   } catch (error) {
     res.status(500).send({ error: 'Ein Fehler ist aufgetreten' });
