@@ -12,6 +12,7 @@ const authorize = roles => async (req, res, next) => {
     }
 
     req.user = { _id: decoded.userId, role: decoded.role };
+    console.log(decoded.role);
     next();
   } catch (error) {
     return res.status(401).send({ error: 'Bitte authentifizieren' });
